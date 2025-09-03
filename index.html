@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Information Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .form-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            box-sizing: border-box;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #4CAF50;
+        }
+
+        label {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="email"],
+        input[type="date"],
+        textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .error {
+            color: red;
+            font-size: 12px;
+        }
+
+        .success {
+            color: green;
+            font-size: 14px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <h2>Medical Information Form</h2>
+        <form id="medicalForm">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="dob">Date of Birth</label>
+            <input type="date" id="dob" name="dob" required>
+
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="phone">Phone Number</label>
+            <input type="number" id="phone" name="phone" required>
+
+            <label for="medicalHistory">Medical History</label>
+            <textarea id="medicalHistory" name="medicalHistory" rows="4" placeholder="List any medical conditions or past surgeries" required></textarea>
+
+            <button type="submit">Submit</button>
+        </form>
+        <div id="formResult"></div>
+    </div>
+
+    <script>
+        // JavaScript form validation and handling
+        document.getElementById('medicalForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form submission for validation
+
+            let form = event.target;
+            let resultDiv = document.getElementById('formResult');
+            resultDiv.innerHTML = ''; // Clear any previous result
+
+            // Clear previous error messages
+            let errorMessages = document.querySelectorAll('.error');
+            errorMessages.forEach((msg) => msg.remove());
+
+            let name = form.name.value.trim();
+            let dob = form.dob.value.trim();
+            let email = form.email.value.trim();
+            let phone = form.phone.value.trim();
+            let medicalHistory = form.medicalHistory.value.trim();
+
+            let valid = true;
+
+            // Name validation
+            if (name === "") {
+                valid = false;
+                showError(form.name, "Name is required.");
+            }
+
+            // Email validation
+            const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+            if (!email.match(emailPattern)) {
+                valid = false;
+                showError(form.email, "Please enter a valid email address.");
+            }
+
+            // Phone validation
+            if (phone.length < 10) {
+                valid = false;
+                showError(form.phone, "Please enter a valid phone number.");
+            }
+
+            // Medical history validation
+            if (medicalHistory === "") {
+                valid = false;
+                showError(form.medicalHistory, "Medical history is required.");
+            }
+
+            if (valid) {
+                resultDiv.innerHTML = `<p class="success">Form submitted successfully! We have received your information.</p>`;
+                form.reset(); // Reset the form
+            }
+        });
+
+        function showError(inputElement, message) {
+            let errorDiv = document.createElement('div');
+            errorDiv.classList.add('error');
+            errorDiv.innerText = message;
+            inputElement.after(errorDiv);
+        }
+    </script>
+
+</body>
+</html>
